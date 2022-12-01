@@ -10,7 +10,7 @@ public class Day1 extends Day implements TwoPartProblem{
     }
 
     // Creation of a function that will take in the input as a List of Strings, accumulate the numbers between blank lines, and returns a sorted List.
-    public List<Integer> sumAndSort(){
+    protected List<Integer> sumAndSort(){
         int currentTotal = 0;
         ArrayList<Integer> totals = new ArrayList<>();
         // Loop through and sum the rows between the blank rows.
