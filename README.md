@@ -2,6 +2,8 @@
 Merry Christmas 
 This is my working answers for advent of code 2022. Trying to get better with Java... 
 Wish me luck!
+
+
                        *             ,
                                    _/^\_
                                   <     >
