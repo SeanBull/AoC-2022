@@ -6,7 +6,7 @@ public class Day2 extends Day implements TwoPartProblem{
     }
 
 
-    public int resultScore(String[] splitLine){
+    protected int resultScore(String[] splitLine){
         //choice
         switch (splitLine[1]) {
             //Rock
@@ -35,7 +35,7 @@ public class Day2 extends Day implements TwoPartProblem{
     }
 
 
-    public int forcedChoiceScore(String[] splitLine){
+    protected int forcedChoiceScore(String[] splitLine){
         //Result
         switch (splitLine[1]) {
             //lose

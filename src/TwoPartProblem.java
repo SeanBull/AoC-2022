@@ -1,6 +1,6 @@
 public interface TwoPartProblem {
 
-
+    // A simple interface so that all day classes can inherit simple out-putters to console.
     default int part1(){
         return 0;
     }
