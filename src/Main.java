@@ -10,5 +10,6 @@ public class Main {
         Day2 day2 = new Day2("resources/day2.txt");
         day2.sOutPart1();
         day2.sOutPart2();
+
     }
 }
