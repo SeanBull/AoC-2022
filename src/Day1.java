@@ -37,9 +37,4 @@ public class Day1 extends Day implements TwoPartProblem{
         return totals.get(0) + totals.get(1) + totals.get(2);
 
     }
-
-
-
-
-
 }
