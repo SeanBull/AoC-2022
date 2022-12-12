@@ -11,9 +11,17 @@ public class Main {
 //        day2.sOutPart1();
 //        day2.sOutPart2();
 
-        Day3 day3 = new Day3("resources/day3.txt");
-        day3.sOutPart1();
-        day3.sOutPart2();
+//        Day3 day3 = new Day3("resources/day3.txt");
+//        day3.sOutPart1();
+//        day3.sOutPart2();
+
+        Day4 day4 = new Day4("resources/day4.txt");
+        day4.sOutPart1();
+        day4.sOutPart2();
+
+
+
+
 
 
     }
