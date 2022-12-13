@@ -1,6 +1,7 @@
 import java.io.*;
 
 
+
 public class Main {
     public static void main(String[] args) throws IOException {
 //        Day1 day1 = new Day1("resources/day1.txt");
@@ -15,9 +16,14 @@ public class Main {
 //        day3.sOutPart1();
 //        day3.sOutPart2();
 
-        Day4 day4 = new Day4("resources/day4.txt");
-        day4.sOutPart1();
-        day4.sOutPart2();
+//        Day4 day4 = new Day4("resources/day4.txt");
+//        day4.sOutPart1();
+//        day4.sOutPart2();
+
+        Day5 day5 = new Day5("resources/day5.txt");
+        day5.part1();
+        day5.part2();
+
 
 
 

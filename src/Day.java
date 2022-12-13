@@ -16,7 +16,10 @@ public class Day {
         Path p = Paths.get(filename);
         this.lines = Files.readAllLines(p, StandardCharsets.UTF_8);
     }
-
+    public List<String> readFile(String filename) throws IOException {
+        Path p = Paths.get(filename);
+        return Files.readAllLines(p, StandardCharsets.UTF_8);
+    }
 
 
 
