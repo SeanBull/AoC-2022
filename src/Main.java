@@ -24,9 +24,14 @@ public class Main {
 //        day5.part1();
 //        day5.part2();
 
-        Day6 day6 = new Day6("resources/day6.txt");
-        day6.sOutPart1();
-        day6.sOutPart2();
+//        Day6 day6 = new Day6("resources/day6.txt");
+//        day6.sOutPart1();
+//        day6.sOutPart2();
+
+        Day7 day7 = new Day7("resources/day7.txt");
+        day7.sOutPart1();
+//        day6.sOutPart2();
+
 
 
 
