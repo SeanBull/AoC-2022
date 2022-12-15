@@ -23,64 +23,6 @@ public class Day8 extends Day implements TwoPartProblem{
         return treesAsArray;
     }
 
-    public int insideTreeChecker(List<Integer[]> treesAsArray){
-        int treeCount = 0;
-        boolean[][] isViewable = new boolean[lines.size()][lines.get(0).length()];
-        // if tree is visible on x-axis
-        for ( int y = 1; y < treesAsArray.size() -1; y++){
-            int biggestTreeBehindFromStart = treesAsArray.get(y)[0];
-            for ( int x = 1; x < lines.get(y).length() -2; x++){
-                int currentTree =  treesAsArray.get(y)[x];
-                if (currentTree>biggestTreeBehindFromStart){
-                    biggestTreeBehindFromStart = currentTree;
-                    if (!isViewable[x][y]){
-                        treeCount++;
-                        isViewable[x][y] = true;
-                    }
-                }
-            }
-            int biggestTreeBehindFromEnd = treesAsArray.get(y)[treesAsArray.size()-1];
-            for ( int x = treesAsArray.size()-2; x > 0; x--){
-//                System.out.println("from end: " + biggestTreeBehindFromEnd);
-                int currentTree =  treesAsArray.get(y)[x];
-                if (currentTree>biggestTreeBehindFromEnd){
-                    biggestTreeBehindFromEnd = currentTree;
-                    if (!isViewable[x][y]){
-                        treeCount++;
-
-                        isViewable[x][y] = true;
-                    }
-
-                }
-
-            }
-        }
-        for ( int x = 1; x < lines.get(0).length() -2; x++){
-            int biggestTreeBehindFromStart = treesAsArray.get(0)[x];
-            for (int y = 1; y < treesAsArray.size() -2; y++){
-                int currentTree =  treesAsArray.get(y)[x];
-                if (currentTree>biggestTreeBehindFromStart){
-                    biggestTreeBehindFromStart = currentTree;
-                    if (!isViewable[x][y]){
-                        treeCount++;
-                        isViewable[x][y] = true;
-                    }
-                }
-            }
-            int biggestTreeBehindFromEnd = treesAsArray.get(treesAsArray.size()-1)[x];
-            for ( int y = treesAsArray.size()-2; y > 0; y--){
-                int currentTree =  treesAsArray.get(y)[x];
-                if (currentTree>biggestTreeBehindFromEnd){
-                    biggestTreeBehindFromEnd = currentTree;
-                    if (!isViewable[x][y]) {
-                        treeCount++;
-                        isViewable[x][y] = true;
-                    }
-                }
-            }
-        }
-    return treeCount;
-    }
     public int scoreAbove(int x, int y, List<Integer[]> treesArray){
         int score = 0;
 
@@ -140,6 +82,48 @@ public class Day8 extends Day implements TwoPartProblem{
 
         return score;
     }
+
+    public boolean viewAbove(int x, int y, List<Integer[]> treesArray){
+        int currentTree = treesArray.get(y)[x];
+        for (int i = (y - 1); i> -1; i-- ){
+            if (currentTree <= treesArray.get(i)[x]){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    public boolean viewBelow(int x, int y, List<Integer[]> treesArray){
+        int currentTree = treesArray.get(y)[x];
+        for (int i = y + 1; i< treesArray.size(); i++ ){
+                if (currentTree <= treesArray.get(i)[x]){
+                    return false;
+                }
+        }
+        return true;
+    }
+
+    public boolean viewRight(int x, int y, List<Integer[]> treesArray){
+        int currentTree = treesArray.get(y)[x];
+        for (int i = x + 1; i< treesArray.get(y).length ; i++ ){
+
+            if (currentTree <= treesArray.get(y)[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean viewLeft(int x, int y, List<Integer[]> treesArray){
+        int currentTree = treesArray.get(y)[x];
+        for (int i = x - 1; i> -1; i-- ){
+            if (currentTree <= treesArray.get(y)[i]){
+                return false;
+            }
+        }
+        return true;
+    }
     public int insideViewTreeChecker(List<Integer[]> treesAsArray){
         int highestScore = 0;
         for ( int y = 0; y < treesAsArray.size(); y++){
@@ -154,10 +138,25 @@ public class Day8 extends Day implements TwoPartProblem{
 
         return highestScore;
     }
+    public int treeCounter(List<Integer[]> treesAsArray){
+        int treeCount = 0;
+        for ( int y = 1; y < treesAsArray.size() -1 ; y++){
+            for ( int x = 1; x < lines.get(0).length() -1; x++){
+                if (viewAbove(x, y, treesAsArray) | viewBelow(x, y, treesAsArray)
+                | viewRight(x, y, treesAsArray) | viewLeft(x, y, treesAsArray)){
+                    treeCount++;
+                }
+            }
+        }
+
+
+        return treeCount;
+    }
 
     @Override
     public int part1() {
-        return outsideTreeFinder() + insideTreeChecker(returnTreesAsArray(lines));
+        return outsideTreeFinder() + treeCounter(returnTreesAsArray(lines));
+
     }
     @Override
     public int part2() {
