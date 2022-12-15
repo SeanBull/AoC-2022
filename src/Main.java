@@ -32,9 +32,17 @@ public class Main {
 //        day7.sOutPart1();
 //        day7.sOutPart2();
 
-        Day8 day8 = new Day8("resources/day8.txt");
-        day8.sOutPart1();
-        day8.sOutPart2();
+//        Day8 day8 = new Day8("resources/day8.txt");
+//        day8.sOutPart1();
+//        day8.sOutPart2();
+        Day9 day9 = new Day9("resources/day9.txt");
+        day9.sOutPart1();
+        day9.sOutPart2();
+
+//        Day10 day10 = new Day10("resources/day10.txt");
+//        day10.sOutPart1();
+//        day10.sOutPart2();
+
 
 
 
