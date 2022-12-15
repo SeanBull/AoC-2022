@@ -30,7 +30,7 @@ public class Main {
 
         Day7 day7 = new Day7("resources/day7.txt");
         day7.sOutPart1();
-//        day6.sOutPart2();
+        day7.sOutPart2();
 
 
 

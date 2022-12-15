@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Stack;
+
 
 public class Day7 extends Day implements TwoPartProblem{
 
@@ -17,32 +19,51 @@ public class Day7 extends Day implements TwoPartProblem{
         }
         return totalSize;
     }
-    HashMap<String,Integer> dirsSize = new HashMap<>();
-    public int part1(){
+    public int returnSmallestDeletion(HashMap<String,Integer> dirsSize, int Size){
+        int deletionSize = Size - (70000000- dirsSize.get("/"));
+        int smallestFile = 0;
+        for (String dir: dirsSize.keySet()){
+            if (dirsSize.get(dir) >= deletionSize){
+                if(smallestFile == 0){
+                    smallestFile = dirsSize.get(dir);
+                }
+                else if (smallestFile> dirsSize.get(dir)){
+                    smallestFile = dirsSize.get(dir);
+                }
+
+            }
+        }
+        return smallestFile;
+    }
+
+    public HashMap<String, Integer> readCommandsAndReturnFileSizes(){
+        //setting the first level as root which is level 0
         String currentDir= "/";
-        Stack<String> parents = new Stack<>();
         int level = 0;
+        //initializing a random class to be able to assign unique names to duplicate dir names
+        Random random = new Random();
+        //A stack to keep on top of the parents of the current directory as any file found will increase the size of all of these.
+        Stack<String> parents = new Stack<>();
+        //A hash map of all created unique dir names and there sizes
+        HashMap<String,Integer> dirsSize = new HashMap<>();
 
+        //Looping through the commands
         for (String line: lines){
-
             String[] lineArray = line.split(" ");
-//            System.out.println("this is the stack: " + parents.toString());
-//            System.out.println("this is the current dir " + currentDir);
+            //Catching the command lines, and keeping track of the level and current directory
             if (line.contains("$")){
                 if (line.contains("cd") && !line.contains("..") && !line.contains("/")){
-                    System.out.println(line);
                     parents.add(currentDir);
                     level ++;
-                    currentDir = lineArray[2] + "-" + Integer.toString(level);
-                    System.out.println(currentDir);
+                    currentDir = lineArray[2] + "-" + level + "-" + (char) (random.nextInt(26) + 'a');
                 }
                 if (line.contains("..")){
-
                     currentDir = parents.pop();
                     level--;
-                    System.out.println(".." + level);
+
                 }
             }
+            //Catching the lines which are files, adding their size to the appropriate hash table entry.
             else if (!line.contains("dir")){
                 if (!dirsSize.containsKey(currentDir)){
                     dirsSize.put(currentDir,Integer.parseInt(lineArray[0]));
@@ -66,7 +87,13 @@ public class Day7 extends Day implements TwoPartProblem{
 
 
         }
-        System.out.println(dirsSize);
-        return returnSumUnderSize(dirsSize, 100000);
+        return dirsSize;
+    }
+
+    public int part1(){
+        return returnSumUnderSize(readCommandsAndReturnFileSizes(), 100000);
+    }
+    public int part2(){
+        return returnSmallestDeletion(readCommandsAndReturnFileSizes(), 30000000);
     }
 }
