@@ -27,13 +27,18 @@ public class Day9 extends Day implements TwoPartProblem{
             nineTailsAndHead.put(i, XY);
         }
     }
-//    public int[][] drawPositions(HashMap<Integer, Integer[]> headAndTails, ArrayList<Integer[]> visits){
-//        Optional<Integer[]> x = visits.stream().max((first, second) -> first[0].compareTo(second[0]));
-//        Optional<Integer[]> y = visits.stream().max((first, second) -> first[1].compareTo(second[1]));
-//        int[][] board = new int[y*2][x.*2];
-//        headAndTails.forEach((item,coors)-> board[coors[0]+y[1]][coors[1]+x[0]] = item );
-//        return board;
-//    }
+    public int[][] drawPositions(HashMap<Integer, Integer[]> headAndTails, ArrayList<Integer[]> visits){
+        Optional<Integer[]> maxX = visits.stream().max((first, second) -> first[0].compareTo(second[0]));
+        Optional<Integer[]> minX = visits.stream().min((first, second) -> first[0].compareTo(second[0]));
+        Optional<Integer[]> maxY = visits.stream().max((first, second) -> first[1].compareTo(second[1]));
+        Optional<Integer[]> minY = visits.stream().min((first, second) -> first[1].compareTo(second[1]));
+        int[][] board = new int[Math.abs(minY.get()[1])+ maxY.get()[1]][Math.abs(minX.get()[0])+ maxX.get()[0]];
+        headAndTails.forEach((item,coors)-> board[coors[1]+board.length/2][coors[0]+board[0].length/2] = item );
+        for (int[] row: board){
+            System.out.println(Arrays.toString(row));
+        }
+        return board;
+    }
 
     public void moveHead(ArrayList<Integer[]> visits,HashMap<Integer, Integer[]> headAndTails, String direction, int moves) {
         for (int i = 0; i < moves; i++) {
@@ -63,8 +68,8 @@ public class Day9 extends Day implements TwoPartProblem{
                 Integer[] leadingKnot = headAndTails.get(j);
                 Integer[] followingKnot = headAndTails.get(j+1);
                 if (doesTailMove(leadingKnot, followingKnot)) {
-                    headAndTails.get(j + 1)[0] = followingKnot[0] + moveAxis(followingKnot[0], leadingKnot[0]);
-                    headAndTails.get(j + 1)[1] = followingKnot[1] + moveAxis(followingKnot[1], leadingKnot[1]);
+                    followingKnot[0] = followingKnot[0] + moveAxis(followingKnot[0], leadingKnot[0]);
+                    followingKnot[1] = followingKnot[1] + moveAxis(followingKnot[1], leadingKnot[1]);
                 }
             }
 
@@ -86,6 +91,7 @@ public class Day9 extends Day implements TwoPartProblem{
         for (String[] line: input ){
             moveHead(visits, headsAndTails,line[0], Integer.parseInt(line[1]));
         }
+//        drawPositions(headsAndTails, visits);
         return visits.size();
     }
     @Override
