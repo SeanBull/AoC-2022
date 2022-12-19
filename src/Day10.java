@@ -51,7 +51,6 @@ public class Day10 extends Day implements TwoPartProblem{
             }
             //return the position of the sprite on the current tick (ie i+1)
             int position = returnOnTick(i+1, lines);
-            System.out.println("i " + i + " position: "+position);
             //total position of sprite
             int cathEnd = position + 1;
             int cathStart = position -1;
