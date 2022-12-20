@@ -11,7 +11,7 @@ public class Day11 extends Day implements TwoPartProblem{
     public ArrayList<List<String>> getInput(List<String> lines ) {
         ArrayList<List<String>> input = new ArrayList<>();
         for (String line: lines){
-            List<String> list = new ArrayList<String>(Arrays.asList(line.split(" ")));
+            List<String> list = new ArrayList<>(Arrays.asList(line.split(" ")));
             list.removeIf(String::isEmpty);
             input.add(list);
 
@@ -19,27 +19,23 @@ public class Day11 extends Day implements TwoPartProblem{
         return input;
     }
 
-    public List<Monkey> makeMonkeys(ArrayList<List<String>> input ){
+    public List<Monkey> makeMonkeys(ArrayList<List<String>> input, int worryReducer ){
         List<Monkey> monkeys = new LinkedList<>();
         int monkeyNumber = 0;
         String operation = "";
-        ArrayList<Integer> startingItems = new ArrayList<>();
+        ArrayList<Long> startingItems = new ArrayList<>();
         int factor = 0;
-        int ifFalseMonkey = 0;
+        int ifFalseMonkey;
         int ifTrueMonkey = 0;
         int testWorry = 0;
 
-        for (int i = 0; i <  input.size(); i++){
-            System.out.println(input.get(i));
-            if(!(input.get(i).size() < 1)) {
-                if (input.get(i).size() > 1) {
-                    switch (input.get(i).get(1)) {
-                        case ("true:") -> {
-                            ifTrueMonkey = Integer.parseInt(input.get(i).get(5));
-                            break;
-                        }
+        for (List<String> strings : input) {
+            if (!(strings.size() < 1)) {
+                if (strings.size() > 1) {
+                    switch (strings.get(1)) {
+                        case ("true:") -> ifTrueMonkey = Integer.parseInt(strings.get(5));
                         case ("false:") -> {
-                            ifFalseMonkey = Integer.parseInt(input.get(i).get(5));
+                            ifFalseMonkey = Integer.parseInt(strings.get(5));
                             monkeys.add(new Monkey(
                                     monkeyNumber,
                                     startingItems,
@@ -47,36 +43,31 @@ public class Day11 extends Day implements TwoPartProblem{
                                     factor,
                                     ifFalseMonkey,
                                     ifTrueMonkey,
-                                    testWorry
+                                    testWorry,
+                                    worryReducer
                             ));
                         }
                     }
                 }
-                switch (input.get(i).get(0)) {
-                    case ("Monkey") -> {
-                        monkeyNumber = Integer.parseInt(String.valueOf(input.get(0).get(1).charAt(0)));
-                    }
+                switch (strings.get(0)) {
+                    case ("Monkey") -> monkeyNumber = Integer.parseInt(String.valueOf(strings.get(1).charAt(0)));
                     case ("Starting") -> {
-                        List<String> subString = input.get(i).subList(2, (input.get(i).size()));
-                        subString.forEach((x) -> startingItems.add(Integer.parseInt(String.valueOf(x.charAt(0)))));
-                        System.out.println(startingItems);
+                        List<String> subString = strings.subList(2, (strings.size()));
+                        startingItems.clear();
+                        subString.forEach((x) -> startingItems.add(Long.parseLong(x.replace(",", ""))));
                     }
                     case ("Operation:") -> {
-                        operation = input.get(i).get(4);
-                        if (Objects.equals(input.get(i).get(5), "old")){
+                        operation = strings.get(4);
+                        if (Objects.equals(strings.get(5), "old")) {
                             operation = "square";
                             factor = 0;
-                        }
-                        else{
-                            factor = Integer.parseInt(input.get(i).get(5));
+                        } else {
+                            factor = Integer.parseInt(strings.get(5));
                         }
 
 
                     }
-                    case ("Test:") -> {
-                        testWorry = Integer.parseInt(input.get(i).get(3));
-
-                    }
+                    case ("Test:") -> testWorry = Integer.parseInt(strings.get(3));
 
                 }
             }
@@ -87,9 +78,10 @@ public class Day11 extends Day implements TwoPartProblem{
     }
 
     public List<Monkey> doRounds(int rounds, List<Monkey> monkeys){
+
         while (rounds > 0){
         for (Monkey monkey: monkeys){
-            HashMap<Integer, ArrayList<Integer>> returnItems = monkey.clearItems();
+            HashMap<Integer, ArrayList<Long>> returnItems = monkey.clearItems();
             returnItems.forEach((k,v) -> monkeys.get(k).addItems(v));
         }
         rounds--;
@@ -97,26 +89,30 @@ public class Day11 extends Day implements TwoPartProblem{
         return monkeys;
     }
 
-    public int returnMonkeyNumber (List<Monkey> monkeys){
-        int monkey1 = 0;
-        int monkey2 = 0;
-        for (Monkey monkey: monkeys){
-            System.out.println(monkey.monkeyCount);
-            if(monkey.monkeyCount > monkey1){
-                monkey1 = monkey.monkeyCount;
-            }
-            else if (monkey.monkeyCount > monkey2){
-                monkey2 = monkey.monkeyCount;
-            }
+    public long returnMonkeyNumber (List<Monkey> monkeys){
+        int[] ordered = new int[monkeys.toArray().length];
+        for (int i = 0; i < monkeys.toArray().length; i++){
+            Monkey monkey = monkeys.get(i);
+            ordered[i]= monkey.monkeyCount;
         }
-        return monkey1 * monkey2;
+        Arrays.sort(ordered);
+        return (long) ordered[ordered.length - 1] * ordered[ordered.length-2];
     }
 
     @Override
     public int part1() {
         ArrayList<List<String>> input = getInput(lines);
-        List<Monkey> monkeys = makeMonkeys(input);
+        List<Monkey> monkeys = makeMonkeys(input, 3);
         monkeys = doRounds(20, monkeys);
-        return returnMonkeyNumber(monkeys);
+        System.out.println("The answer to part 1:" + returnMonkeyNumber(monkeys));
+        return 0;
+    }
+    @Override
+    public int part2() {
+        ArrayList<List<String>> input = getInput(lines);
+        List<Monkey> monkeys = makeMonkeys(input, 0);
+        monkeys = doRounds(10000, monkeys);
+        System.out.println("The answer to part 2:" + returnMonkeyNumber(monkeys));
+        return 0;
     }
 }

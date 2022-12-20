@@ -1,11 +1,15 @@
+import org.w3c.dom.ls.LSOutput;
+
+import java.math.BigInteger;
 import java.sql.Array;
 import java.util.*;
 
 public class Monkey {
-    public Queue<Integer> things = new LinkedList<Integer>();
+    private final int worryReducer;
+    public Queue<Long> things = new LinkedList<>();
     public int number;
     
-    public Monkey(int number,ArrayList<Integer> startingItems, String operation, int factor, int ifFalseMonkey, int ifTrueMonkey, int testWorry){
+    public Monkey(int number,ArrayList<Long> startingItems, String operation, int factor, int ifFalseMonkey, int ifTrueMonkey, int testWorry, int worryReducer){
 
         this.number = number;
         this.operation = operation;
@@ -13,12 +17,13 @@ public class Monkey {
         this.ifFalseMonkey = ifFalseMonkey;
         this.ifTrueMonkey = ifTrueMonkey;
         this.testWorry = testWorry;
+        this.worryReducer = worryReducer;
 
-        this.things.addAll(startingItems);
+        things.addAll(startingItems);
 
 
     }
-    ArrayList<Integer> startingItems = new ArrayList<>();
+    ArrayList<Long> startingItems = new ArrayList<>();
     public String operation;
     public int factor;
 
@@ -29,11 +34,10 @@ public class Monkey {
 
     public int monkeyCount=0;
 
-    public boolean testWorry (int worry){
-        if (worry % testWorry == 0 ) return true;
-        else return false;
+    public boolean testWorry (Long worry){
+        return (worry % testWorry) == 0;
     }
-    public int applyOperation(int number){
+    public Long applyOperation(Long number){
         if (operation.equals("*")){
             return number * factor;
         }
@@ -43,24 +47,33 @@ public class Monkey {
         else return number + factor;
     }
 
-    public void addItems(ArrayList<Integer> newItems){
+    public void addItems(ArrayList<Long> newItems){
         things.addAll(newItems);
     }
 
-    public HashMap<Integer, ArrayList<Integer>> clearItems(){
-        HashMap<Integer, ArrayList<Integer>> nextMonkey = new HashMap<>();
+    public String toString(){
+        return "I am monkey %s \n I am holding items : %s".formatted(number, things);
+    }
+
+    public HashMap<Integer, ArrayList<Long>> clearItems(){
+        HashMap<Integer, ArrayList<Long>> nextMonkey = new HashMap<>();
         nextMonkey.put(ifTrueMonkey, new ArrayList<>() );
         nextMonkey.put(ifFalseMonkey, new ArrayList<>() );
 
         while (things.toArray().length > 0){
             monkeyCount++;
-            int number = things.remove();
-            number = applyOperation(number);
-            if (testWorry(number)){
-                nextMonkey.get(ifTrueMonkey).add(number/3);
+            Long number = things.remove();
+            if (worryReducer > 0){
+                number = applyOperation(number)/worryReducer;
             }
             else{
-                nextMonkey.get(ifFalseMonkey).add(number/3);
+                number = applyOperation(number) % 9699690;
+            }
+            if (testWorry(number)){
+                nextMonkey.get(ifTrueMonkey).add((number));
+            }
+            else{
+                nextMonkey.get(ifFalseMonkey).add((number));
             }
 
 

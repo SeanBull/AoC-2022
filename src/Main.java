@@ -45,7 +45,7 @@ public class Main {
 //        day10.sOutPart2();
         Day11 day11 = new Day11("resources/day11.txt");
         day11.sOutPart1();
-//        day11.sOutPart2();
+        day11.sOutPart2();
 
 
 
